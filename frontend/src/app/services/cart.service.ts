@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs'; // Subject import karein
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartCountSubject = new BehaviorSubject<number>(0);
-  public cartCount$ = this.cartCountSubject.asObservable();
+  // Existing code...
+  public cartCount$ = new BehaviorSubject<number>(0);
 
-  constructor() { }
+  //  NEW: Animation Trigger ke liye Subject
+  private cartAnimationSubject = new Subject<void>();
+  public cartAnimation$ = this.cartAnimationSubject.asObservable();
+
+  constructor() {}
 
   updateCartCount(count: number) {
-    this.cartCountSubject.next(count);
+    this.cartCount$.next(count);
   }
 
-  getCartCount(): number {
-    return this.cartCountSubject.value;
+  //  NEW: Call this whenever an item is added
+  triggerAnimateCart() {
+    this.cartAnimationSubject.next();
   }
 }

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-/*INTERFACES*/
+// INTERFACES
 export interface MenuItem {
   _id?: string;
   title: string;
@@ -38,7 +38,7 @@ export interface Cart {
   totalPrice: number;
 }
 
-/*  SERVICE  */
+// SERVICE
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +48,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  /*  HELPER: Get Headers with Token  */
+  // HELPER: Get Headers with Token
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     let headers = new HttpHeaders({
@@ -65,7 +65,7 @@ export class ApiService {
     return headers;
   }
 
-  /*  AUTH  */
+  // AUTH
   login(email: string, password: string) {
     return this.http.post<any>(
       `${this.apiUrl}/auth/login`,
@@ -75,7 +75,7 @@ export class ApiService {
 
 
 
-  /*  MENU  */
+  // MENU
   getAllMenuItems(): Observable<{ success: boolean; data: MenuItem[] }> {
     return this.http.get<{ success: boolean; data: MenuItem[] }>(
       `${this.apiUrl}/menu`
@@ -114,7 +114,7 @@ export class ApiService {
     );
   }
 
-  /*  CART  */
+  // CART
   getCart(): Observable<{ success: boolean; data: Cart }> {
     return this.http.get<{ success: boolean; data: Cart }>(
       `${this.apiUrl}/cart`
@@ -140,7 +140,7 @@ export class ApiService {
     );
   }
 
-/*  AI  */
+// AI
 extractMenuDetails(userInput: string): Observable<AIResponse> {
   return this.http.post<AIResponse>(
     `${this.apiUrl}/ai/extract`,

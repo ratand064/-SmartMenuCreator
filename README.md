@@ -19,6 +19,7 @@ YumBlock challenged developers to build a revolutionary menu management system w
 - **Groq AI Integration**: Lightning-fast LLM processing with intelligent spell correction and price inference
 - **Dual AI Models**: Primary Groq API with smart fallback system for 100% uptime
 - **Auto-categorization**: AI automatically assigns appropriate categories (Appetizer, Main Course, Dessert, etc.)
+- **Voice Input**: Tap the microphone and speak your menu item naturally - *"Butter chicken with naan, price fifteen dollars"* - AI handles the rest with real-time speech-to-text conversion
 
 ### 🎨 **Advanced Image Handling**
 - **AI Image Generation**: Pollinations.ai generates unique, appetizing food images for every dish
@@ -64,7 +65,7 @@ src/
 │   │   ├── cart/                # Shopping cart management
 │   │   ├── creator/             # AI-powered item creation
 │   │   └── item-detail/         # Product detail view
-│   ├── marchentlogin/           # Merchant authentication
+│   ├── login/                   # Merchant authentication
 │   └── services/
 │       ├── api.service.ts       # HTTP client + API wrapper
 │       ├── cart.service.ts      # Cart state management
@@ -112,8 +113,8 @@ Groq API Key (free tier available)
 
 ### 1️⃣ Clone Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/yumblock.git
-cd yumblock
+git clone https://github.com/ratand064/-SmartMenuCreator.git
+cd -SmartMenuCreator
 ```
 
 ### 2️⃣ Backend Setup
@@ -200,39 +201,6 @@ ionic serve
 
 ---
 
-## 🔧 API Endpoints
-
-### Authentication
-```http
-POST /api/auth/login
-GET  /api/auth/me
-```
-
-### Menu Management
-```http
-GET    /api/menu              # Get all items
-GET    /api/menu/:id          # Get single item
-POST   /api/menu              # Create item (Auth required)
-PUT    /api/menu/:id          # Update item (Auth required)
-DELETE /api/menu/:id          # Delete item (Auth required)
-```
-
-### AI Processing
-```http
-POST /api/ai/extract           # Extract menu details from text
-POST /api/ai/generate-image    # Generate AI food image
-```
-
-### Cart Operations
-```http
-GET    /api/cart              # Get current cart
-POST   /api/cart/add          # Add item to cart
-DELETE /api/cart/remove/:id   # Remove item from cart
-DELETE /api/cart/clear        # Clear entire cart
-```
-
----
-
 ## 🎨 Design Highlights
 
 ### **Premium Dark Theme**
@@ -284,7 +252,7 @@ DELETE /api/cart/clear        # Clear entire cart
 
 ---
 
-## 🏆 Why This Solution Wins
+## 🏆 Why This Solution Stands Out
 
 ### ✅ **Complete Feature Implementation**
 - ✓ AI text processing with Groq
@@ -334,34 +302,11 @@ DELETE /api/cart/clear        # Clear entire cart
 
 ---
 
-## 🚀 Deployment
+## 🚀 Live Demo
 
-### **Backend (Render/Railway)**
-```bash
-# Build command
-npm install
-
-# Start command
-npm start
-
-# Environment variables
-MONGODB_URI=your_atlas_uri
-GROQ_API_KEY=your_key
-JWT_SECRET=your_secret
-PORT=5000
-```
-
-### **Frontend (Vercel/Netlify)**
-```bash
-# Build command
-npm run build
-
-# Output directory
-www
-
-# Environment variables
-API_URL=your_backend_url
-```
+- **Frontend**: [aimenucreator.vercel.app](https://aimenucreator.vercel.app)
+- **Backend**: [yumblock-backend.onrender.com](https://yumblock-backend.onrender.com)
+- **GitHub**: [github.com/ratand064/-SmartMenuCreator](https://github.com/ratand064/-SmartMenuCreator.git)
 
 ---
 
@@ -399,7 +344,10 @@ Password: customer123
 
 ## 📄 License
 
-This project is submitted for the YumBlock coding challenge and is available under the MIT License.
+MIT License
+
+Copyright (c) 2025 Ratan.d
+
 
 ---
 
@@ -416,7 +364,7 @@ This project is submitted for the YumBlock coding challenge and is available und
 
 ### ⭐ If you find this project impressive, please star the repository!
 
-**Made with ❤️ for YumBlock Coding Challenge**
+**Crafted with ❤️ by Ratan.D for YumBlock Coding Challenge**
 
 *"Talk it into existence, share it instantly"*
 

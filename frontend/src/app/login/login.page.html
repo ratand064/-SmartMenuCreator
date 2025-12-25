@@ -1,0 +1,50 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/menu" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="main-title">Merchant <span>Login</span></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="login-container fade-in">
+    
+    <div class="brand-section ion-text-center">
+      <div class="logo-wrapper">
+        <span class="logo-emoji">🍔</span>
+      </div>
+      <h1 class="brand-name">Yum<span>Block</span></h1>
+      <p class="brand-tagline">Manage your menu with AI power</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="form-wrapper">
+        
+        <ion-item lines="none" class="form-input-item">
+          <ion-label position="stacked">EMAIL ADDRESS</ion-label>
+          <ion-input type="email" [(ngModel)]="email" placeholder="merchant@yumblock.com"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="form-input-item">
+          <ion-label position="stacked">PASSWORD</ion-label>
+          <ion-input type="password" [(ngModel)]="password" placeholder="••••••••"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" (click)="onLogin()" [disabled]="isLoading" class="login-btn">
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          <span *ngIf="!isLoading">Authorize Login <ion-icon name="key-outline" slot="end"></ion-icon></span>
+        </ion-button>
+
+      </div>
+    </div>
+
+    <div class="demo-hint ion-text-center">
+      <div class="hint-pill">
+        <span>DEMO ACCESS</span>
+        <p>merchant@yumblock.com / merchant123</p>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

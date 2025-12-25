@@ -1,0 +1,155 @@
+ion-content {
+  --background: #121212;
+}
+.custom-toolbar {
+  --background: #121212;
+  --border-width: 0;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+.main-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 0.5px;
+  color: #fff;
+  span {
+    color: var(--ion-color-primary);
+    font-style: italic;
+  }
+}
+
+.clear-btn {
+  font-weight: 700;
+  font-size: 14px;
+  --color: #EB445A;
+  text-transform: none;
+}
+
+ion-list {
+  background: transparent;
+  padding: 10px 16px;
+}
+
+.cart-card {
+  --background: #1e1e1e;
+  --color: white;
+  --border-radius: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+
+  ion-thumbnail {
+    width: 65px;
+    height: 65px;
+    margin-right: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .item-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .item-price {
+    font-size: 14px;
+    color: #888;
+    span {
+      color: var(--ion-color-primary);
+      font-weight: 600;
+    }
+  }
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  .qty-btn {
+    width: 32px;
+    height: 32px;
+    --border-radius: 10px;
+    margin: 0;
+    --box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  .remove-btn { --background: #333; --color: #fff; }
+  .add-btn { --background: var(--ion-color-primary); --color: #fff; }
+
+  .qty-text {
+    font-weight: 800;
+    color: #fff;
+    font-size: 16px;
+    min-width: 20px;
+    text-align: center;
+  }
+}
+.fixed-bottom-container {
+  position: absolute;
+  bottom: 85px;
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.floating-checkout-card {
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  .label { color: #aaa; font-weight: 500; }
+  .amount { color: #fff; font-size: 24px; font-weight: 800; }
+}
+
+.checkout-btn {
+  --background: #25D366;
+  --border-radius: 16px;
+  font-weight: 700;
+  height: 54px;
+  --box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  
+  .empty-icon-wrapper {
+    width: 100px;
+    height: 100px;
+    background: #1e1e1e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    ion-icon { font-size: 50px; color: var(--ion-color-primary); opacity: 0.5; }
+  }
+
+  h3 { color: #fff; font-weight: 700; }
+  p { color: #666; margin-bottom: 30px; }
+  .browse-btn { --border-radius: 20px; font-weight: 600; width: 180px; }
+}
+
+// Animations
+.fade-in { animation: fadeIn 0.6s ease-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

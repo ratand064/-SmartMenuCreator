@@ -1,60 +1,130 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Create Item</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-title class="main-title">
+      Create <span>Item</span>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-card>
-    <ion-card-content>
-      <ion-item>
-        <ion-textarea 
-          [(ngModel)]="inputText" 
-          placeholder="E.g., Spicy chicken curry with rice for 12"
-          rows="3">
-        </ion-textarea>
-      </ion-item>
-      <ion-button expand="block" (click)="processAI()" [disabled]="loading">
-        <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
-        <span *ngIf="!loading">Process with AI</span>
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="parsedItem">
-    <ion-card-header>
-      <ion-card-title>Parsed Item</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="stacked">Title</ion-label>
+<ion-content class="ion-padding">
+  <div class="input-section">
+    <p class="hint-text">Describe your dish to AI...</p>
+    <ion-textarea 
+      class="custom-textarea" 
+      [(ngModel)]="inputText" 
+      placeholder="e.g. 'Spicy Chicken Biryani plate for 250'" 
+      rows="4" 
+      autoGrow="true">
+    </ion-textarea>
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="3" class="mic-col">
+          <ion-button 
+            expand="block" 
+            fill="outline" 
+            class="mic-btn" 
+            [class.mic-active]="isListening" 
+            (click)="startListening()">
+            <ion-icon [name]="isListening ? 'mic' : 'mic-outline'"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="9">
+          <ion-button 
+            expand="block" 
+            color="primary" 
+            class="process-btn" 
+            (click)="processAI()" 
+            [disabled]="loading || !inputText">
+            <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+            <span *ngIf="!loading" class="btn-content">
+              Generate <ion-icon name="sparkles"></ion-icon>
+            </span>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="isListening">
+        <ion-col class="ion-text-center">
+          <p class="recording-text fade-in">Listening... Speak now 🎙️</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div *ngIf="parsedItem" class="fade-in result-card">
+    <div class="ion-padding-horizontal ion-padding-top">
+      <ion-item lines="none" class="form-input-item title-input">
+        <ion-label position="stacked">TITLE</ion-label>
         <ion-input [(ngModel)]="parsedItem.title"></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Description</ion-label>
-        <ion-textarea [(ngModel)]="parsedItem.description"></ion-textarea>
+    </div>
+    <div class="ion-padding-horizontal">
+      <ion-item lines="none" class="form-input-item">
+        <ion-label position="stacked">DESCRIPTION</ion-label>
+        <ion-textarea [(ngModel)]="parsedItem.description" rows="3" autoGrow="true"></ion-textarea>
       </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Price</ion-label>
+    </div>
+    <div class="ion-padding-horizontal">
+      <ion-item lines="none" class="form-input-item price-input">
+        <ion-label position="stacked">PRICE (₹)</ion-label>
         <ion-input type="number" [(ngModel)]="parsedItem.price"></ion-input>
       </ion-item>
-      
-      <!-- Image Preview -->
-      <ion-img *ngIf="parsedItem.imageUrl" [src]="parsedItem.imageUrl"></ion-img>
-      
-      <!-- Image Options -->
-      <ion-button expand="block" (click)="generateImage()" [disabled]="imageLoading">
-        <ion-spinner *ngIf="imageLoading" name="crescent"></ion-spinner>
-        <span *ngIf="!imageLoading">Generate AI Image</span>
+    </div>
+    <div class="image-section-wrapper">
+      <div class="hero-image-container" *ngIf="parsedItem.imageUrl || imageLoading">
+        <div *ngIf="imageLoading" class="image-loader">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+          <p>AI is painting... 🎨</p>
+        </div>
+        <img 
+          *ngIf="!imageLoading && parsedItem.imageUrl" 
+          [src]="parsedItem.imageUrl" 
+          (error)="handleImageError($event)" 
+          alt="Dish Image">
+      </div>
+      <ion-grid class="ion-no-padding options-grid">
+        <ion-row>
+          <ion-col size="6" class="separator-col">
+            <ion-button 
+              expand="full" 
+              fill="clear" 
+              class="option-btn" 
+              (click)="generateImage()" 
+              [disabled]="imageLoading">
+              <span class="btn-content">
+                <ion-icon name="sparkles" slot="start" [color]="imageLoading ? 'medium' : 'primary'"></ion-icon> 
+                {{ imageLoading ? 'Generating...' : 'AI Image' }}
+              </span>
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button 
+              expand="full" 
+              fill="clear" 
+              class="option-btn" 
+              (click)="fileInput.click()"
+              [disabled]="imageLoading">
+              <span class="btn-content">
+                <ion-icon name="camera" slot="start"></ion-icon> 
+                Upload
+              </span>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <div class="ion-padding">
+      <ion-button 
+        expand="block" 
+        color="success" 
+        class="save-btn" 
+        (click)="saveItem()" 
+        [disabled]="loading || imageLoading">
+        <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+        <span *ngIf="!loading">
+          Save to Menu <ion-icon name="checkmark-circle" slot="end"></ion-icon>
+        </span>
       </ion-button>
-      
-      <ion-button expand="block" (click)="fileInput.click()">
-        <ion-icon name="camera" slot="start"></ion-icon>
-        Upload Photo
-      </ion-button>
-      <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden>
-      
-      <ion-button expand="block" color="success" (click)="saveItem()">Save Item</ion-button>
-    </ion-card-content>
-  </ion-card>
+    </div>
+    <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden>
+  </div>
+  <div class="spacer"></div>
 </ion-content>

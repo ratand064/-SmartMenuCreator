@@ -1,0 +1,134 @@
+ion-content {
+  --background: radial-gradient(circle at 50% 0%, #2a2a2a 0%, #121212 100%);
+}
+
+.custom-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  padding-top: 10px;
+}
+
+.main-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: #fff;
+  span { color: var(--ion-color-primary); font-style: italic; }
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 90%;
+  padding: 20px;
+}
+
+.brand- {
+  margin-bottom: 40px;
+
+  .logo-wrapper {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    font-size: 40px;
+  }
+
+  .brand-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: #fff;
+    margin: 0;
+    span { color: var(--ion-color-primary); }
+  }
+
+  .brand-tagline {
+    color: #888;
+    font-size: 14px;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+}
+
+.glass-card {
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.form-input-item {
+  --background: rgba(255, 255, 255, 0.03);
+  --border-radius: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  
+  ion-label {
+    font-size: 10px !important;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--ion-color-primary) !important;
+    margin-bottom: 8px !important;
+  }
+  
+  ion-input {
+    --padding-start: 12px;
+    font-weight: 600;
+    color: #fff;
+    --placeholder-color: #444;
+  }
+}
+
+.login-btn {
+  margin-top: 24px;
+  height: 56px;
+  --border-radius: 18px;
+  --background: var(--ion-color-primary);
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: none;
+  --box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+}
+
+.demo-hint {
+  margin-top: 30px;
+  
+  .hint-pill {
+    display: inline-block;
+    background: rgba(255, 193, 7, 0.05);
+    border: 1px solid rgba(255, 193, 7, 0.1);
+    padding: 10px 20px;
+    border-radius: 16px;
+
+    span {
+      font-size: 9px;
+      font-weight: 900;
+      color: #FFC107;
+      letter-spacing: 2px;
+    }
+
+    p {
+      color: #666;
+      font-size: 12px;
+      margin: 4px 0 0;
+      font-family: monospace;
+    }
+  }
+}
+
+// Animations
+.fade-in { animation: fadeInUp 0.8s ease-out; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}

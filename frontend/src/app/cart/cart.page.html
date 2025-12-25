@@ -1,58 +1,65 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Cart</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-title class="main-title">
+      Your <span>Cart 🛒</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button 
+        fill="clear" 
+        color="danger" 
+        class="clear-btn"
+        (click)="removeItem('all')" 
+        *ngIf="cart?.items?.length">
+        Clear
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content>
-  <ion-card *ngIf="cart && cart.items.length > 0">
-    <ion-list>
-      <ion-item *ngFor="let item of cart.items">
-        <ion-thumbnail slot="start">
-          <img [src]="item.menuItem.imageUrl || 'assets/placeholder.jpg'" />
-        </ion-thumbnail>
-        
-        <ion-label>
-          <h2>{{item.menuItem.title}}</h2>
-          <p>₹{{item.menuItem.price}} x {{item.quantity}}</p>
-          <p><strong>₹{{item.menuItem.price * item.quantity}}</strong></p>
-        </ion-label>
-        
-        <ion-button slot="end" fill="clear" color="danger" (click)="removeItem(item.menuItem._id)">
-          <ion-icon name="trash" slot="icon-only"></ion-icon>
+<ion-content [fullscreen]="true">
+  <div *ngIf="loading" class="ion-padding-top">
+    <app-skeleton-loader view="cart"></app-skeleton-loader>
+  </div>
+  <div class="empty-state fade-in" *ngIf="!loading && (!cart?.items || cart?.items.length === 0)">
+    <div class="empty-icon-wrapper">
+      <ion-icon name="bag-check"></ion-icon>
+    </div>
+    <h3>Your cart is empty</h3>
+    <p>Add some tasty dishes from the menu!</p>
+    <ion-button (click)="goToMenu()" fill="outline" color="primary" class="browse-btn">
+      Browse Menu
+    </ion-button>
+  </div>
+  <ion-list *ngIf="!loading && cart?.items?.length > 0" class="fade-in">
+    <ion-item *ngFor="let item of cart.items" lines="none" class="cart-card">
+      <ion-thumbnail slot="start">
+        <img [src]="item.menuItem?.imageUrl || 'assets/placeholder.png'" />
+      </ion-thumbnail>
+      <ion-label class="ion-text-wrap">
+        <h2 class="item-title">{{ item.menuItem?.title }}</h2>
+        <p class="item-price">₹{{ item.price }} <span>x {{ item.quantity }}</span></p>
+      </ion-label>
+      <div slot="end" class="qty-control">
+        <ion-button class="qty-btn remove-btn" (click)="updateQuantity(item.menuItem._id, 'remove', item.quantity)">
+          <ion-icon name="remove" slot="icon-only"></ion-icon>
         </ion-button>
-      </ion-item>
-    </ion-list>
-    
-    <ion-card-content>
-      <ion-item lines="none">
-        <ion-label class="ion-text-end">
-          <h2><strong>Total: ₹{{cart.totalPrice}}</strong></h2>
-        </ion-label>
-      </ion-item>
-      
-      <ion-button expand="block" color="success" (click)="checkout()">
-        <ion-icon name="checkmark-circle" slot="start"></ion-icon>
-        Checkout
+        <span class="qty-text">{{ item.quantity }}</span>
+        <ion-button class="qty-btn add-btn" (click)="updateQuantity(item.menuItem._id, 'add', item.quantity)">
+          <ion-icon name="add" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-item>
+  </ion-list>
+  <div style="height: 200px;"></div>
+  <div slot="fixed" class="fixed-bottom-container" *ngIf="!loading && cart?.items?.length > 0">
+    <div class="floating-checkout-card fade-in">
+      <div class="total-row">
+        <span class="label">Total to Pay</span>
+        <span class="amount">₹{{ cart.totalPrice }}</span>
+      </div>
+      <ion-button expand="block" class="checkout-btn" (click)="checkoutViaWhatsApp()">
+        <ion-icon name="logo-whatsapp" slot="start"></ion-icon>
+        Place Order on WhatsApp
       </ion-button>
-      
-      <ion-button expand="block" fill="outline" color="danger" (click)="clearCart()">
-        <ion-icon name="close-circle" slot="start"></ion-icon>
-        Clear Cart
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="!cart || cart.items.length === 0">
-    <ion-card-content class="ion-text-center">
-      <ion-icon name="cart-outline" size="large" color="medium"></ion-icon>
-      <h2>Your cart is empty</h2>
-      <p>Add items from the menu!</p>
-      <ion-button routerLink="/tabs/menu">Browse Menu</ion-button>
-    </ion-card-content>
-  </ion-card>
-
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
+    </div>
   </div>
 </ion-content>

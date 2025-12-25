@@ -35,3 +35,56 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'); */
+
+* {
+  font-family: 'Poppins', sans-serif; /* Agar font load na ho to system sans-serif lega */
+}
+
+/* 1. Cards ko Premium banao */
+ion-card {
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  background: var(--ion-card-background);
+  margin-bottom: 20px;
+}
+
+ion-item {
+  --background: transparent;
+  --border-color: #333;
+}
+
+ion-input, ion-textarea {
+  --padding-start: 10px;
+  font-size: 15px;
+}
+
+ion-button {
+  --border-radius: 50px; 
+  text-transform: none; 
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* 4. Floating Input Style fix */
+ion-textarea.custom-textarea {
+  background: #252525;
+  border-radius: 15px;
+  padding: 10px;
+  color: white;
+  --placeholder-color: #888;
+}
+
+/* 5. Animations */
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+}
+
+.mic-active {
+  animation: pulse-red 1.5s infinite;
+  --background: rgba(255, 107, 107, 0.1);
+  --color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+}

@@ -245,47 +245,47 @@ EXAMPLES:
  * @param {string} dishName - Name of the dish
  * @returns {string} Image URL
  */
-async function generateFoodImage(dishName) {
-  try {
-    // Clean dish name
-    const clean = dishName
-      .toLowerCase()
-      .replace(/\d+/g, '')
-      .replace(/[^\w\s]/g, ' ')
-      .trim();
+// async function generateFoodImage(dishName) {
+//   try {
+//     // Clean dish name
+//     const clean = dishName
+//       .toLowerCase()
+//       .replace(/\d+/g, '')
+//       .replace(/[^\w\s]/g, ' ')
+//       .trim();
     
-    // ADD RANDOM SEED for unique images every time
-    const randomSeed = Math.floor(Math.random() * 1000000);
-    const timestamp = Date.now();
+//     // ADD RANDOM SEED for unique images every time
+//     const randomSeed = Math.floor(Math.random() * 1000000);
+//     const timestamp = Date.now();
     
-    // Create AI prompt for exact dish with variations
-    const styleVariations = [
-      'professional food photography',
-      'gourmet plating style',
-      'rustic presentation',
-      'modern fine dining',
-      'traditional indian style',
-      'instagram worthy presentation'
-    ];
+//     // Create AI prompt for exact dish with variations
+//     const styleVariations = [
+//       'professional food photography',
+//       'gourmet plating style',
+//       'rustic presentation',
+//       'modern fine dining',
+//       'traditional indian style',
+//       'instagram worthy presentation'
+//     ];
     
-    const randomStyle = styleVariations[Math.floor(Math.random() * styleVariations.length)];
+//     const randomStyle = styleVariations[Math.floor(Math.random() * styleVariations.length)];
     
-    const prompt = `${randomStyle} of ${clean}, indian restaurant dish, appetizing presentation, high quality 4k, studio lighting, seed ${randomSeed}`;
-    const encoded = encodeURIComponent(prompt);
+//     const prompt = `${randomStyle} of ${clean}, indian restaurant dish, appetizing presentation, high quality 4k, studio lighting, seed ${randomSeed}`;
+//     const encoded = encodeURIComponent(prompt);
     
-    // Pollinations.ai with seed parameter for UNIQUE images
-    const aiImageUrl = `https://image.pollinations.ai/prompt/${encoded}?width=800&height=600&nologo=true&enhance=true&seed=${randomSeed}&timestamp=${timestamp}`;
+//     // Pollinations.ai with seed parameter for UNIQUE images
+//     const aiImageUrl = `https://image.pollinations.ai/prompt/${encoded}?width=800&height=600&nologo=true&enhance=true&seed=${randomSeed}&timestamp=${timestamp}`;
     
-    console.log(`✨ AI Image Generated (Seed: ${randomSeed}):`, aiImageUrl);
-    return aiImageUrl;
+//     console.log(`✨ AI Image Generated (Seed: ${randomSeed}):`, aiImageUrl);
+//     return aiImageUrl;
     
-  } catch (error) {
-    console.error('Image generation error:', error);
-    // Fallback to default food image with random query
-    const random = Math.random().toString(36).substring(7);
-    return `https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop&q=${random}`;
-  }
-}
+//   } catch (error) {
+//     console.error('Image generation error:', error);
+//     // Fallback to default food image with random query
+//     const random = Math.random().toString(36).substring(7);
+//     return `https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop&q=${random}`;
+//   }
+// }
 
 /* ---------- WHATSAPP SHARE MESSAGE ---------- */
 

@@ -1,18 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { SkeletonLoaderComponent } from '../components/skeleton-loader/skeleton-loader.component';
+import { 
+  IonContent, IonHeader, IonToolbar, IonTitle, 
+  IonItem, IonLabel, IonButton, IonIcon, 
+  IonSpinner, IonList, IonThumbnail, IonFooter,
+  AlertController,IonButtons
+} from '@ionic/angular/standalone';
+
 import { ApiService } from '../services/api.service';
 import { CartService } from '../services/cart.service';
 import { ToastService } from '../services/toast';
-import { AlertController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { trash, add, remove, logoWhatsapp, bagCheck } from 'ionicons/icons';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.page.html',
   styleUrls: ['./cart.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterModule]
+  imports: [
+    CommonModule, 
+    SkeletonLoaderComponent, 
+    IonContent, IonHeader, IonToolbar, IonTitle, 
+    IonItem, IonLabel, IonButton, IonIcon,
+    IonList, IonThumbnail,IonButtons
+  ]
 })
 export class CartPage implements OnInit {
   cart: any = null;
@@ -20,10 +34,13 @@ export class CartPage implements OnInit {
 
   constructor(
     private api: ApiService,
-    private cartService: CartService,
+    public cartService: CartService,
     private toast: ToastService,
-    private alertCtrl: AlertController
-  ) {}
+    private alertCtrl: AlertController,
+    private router: Router
+  ) {
+    addIcons({ trash, add, remove, 'logo-whatsapp': logoWhatsapp, 'bag-check': bagCheck });
+  }
 
   ngOnInit() {
     this.loadCart();
@@ -33,75 +50,92 @@ export class CartPage implements OnInit {
     this.loadCart();
   }
 
+  goToMenu() {
+    this.router.navigate(['/tabs/menu']);
+  }
+
   loadCart() {
     this.loading = true;
     this.api.getCart().subscribe({
       next: (res) => {
         if (res.success) {
           this.cart = res.data;
+          this.recalculateTotal(); 
           this.cartService.updateCartCount(this.cart.items.length);
         }
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Cart Error:', err);
-        this.toast.error('Failed to load cart');
-        this.loading = false;
-      }
+      error: () => this.loading = false
     });
+  }
+
+  updateQuantity(itemId: string, action: 'add' | 'remove', currentQty: number) {
+    if (action === 'remove' && currentQty <= 1) {
+      this.removeItem(itemId);
+      return;
+    }
+
+    const item = this.cart.items.find((i: any) => i.menuItem._id === itemId);
+    
+    if (item) {
+      let newQty = Number(item.quantity);
+      if (action === 'add') newQty += 1;
+      else newQty -= 1;
+      
+      item.quantity = newQty;
+      this.recalculateTotal();
+    }
+  }
+
+  recalculateTotal() {
+    if (!this.cart || !this.cart.items) return;
+
+    const total = this.cart.items.reduce((acc: number, item: any) => {
+      const qty = Number(item.quantity) || 1;
+      const price = Number(item.price) || Number(item.menuItem?.price) || 0;
+      return acc + (qty * price);
+    }, 0);
+
+    this.cart.totalPrice = total;
   }
 
   removeItem(menuItemId: string) {
+    if (menuItemId === 'all') {
+       this.api.clearCart().subscribe(res => {
+         if(res.success) {
+           this.cart = { items: [], totalPrice: 0 };
+           this.cartService.updateCartCount(0);
+         }
+       });
+       return;
+    }
+
     this.api.removeFromCart(menuItemId).subscribe({
       next: (res) => {
         if (res.success) {
-          this.cart = res.data;
+          this.cart.items = this.cart.items.filter((i: any) => i.menuItem._id !== menuItemId);
+          this.recalculateTotal();
           this.cartService.updateCartCount(this.cart.items.length);
-          this.toast.success('Item removed!');
+          this.toast.success('Item removed');
         }
-      },
-      error: (err) => {
-        console.error('Remove Error:', err);
-        this.toast.error('Failed to remove item');
       }
     });
   }
 
-  async clearCart() {
-    const alert = await this.alertCtrl.create({
-      header: 'Clear Cart',
-      message: 'Are you sure you want to clear entire cart?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Clear',
-          role: 'destructive',
-          handler: () => {
-            this.api.clearCart().subscribe({
-              next: (res) => {
-                if (res.success) {
-                  this.cart = { items: [], totalPrice: 0 };
-                  this.cartService.updateCartCount(0);
-                  this.toast.success('Cart cleared!');
-                }
-              },
-              error: (err) => {
-                console.error('Clear Error:', err);
-                this.toast.error('Failed to clear cart');
-              }
-            });
-          }
-        }
-      ]
+  checkoutViaWhatsApp() {
+    if (!this.cart || this.cart.items.length === 0) return;
+
+    let message = "Hi! I'd like to place an order via YumBlock:\n\n";
+    this.cart.items.forEach((item: any, index: number) => {
+      const qty = Number(item.quantity) || 1;
+      const price = Number(item.price) || Number(item.menuItem?.price) || 0;
+      message += `${index + 1}. ${item.menuItem.title} x ${qty} - ₹${price * qty}\n`;
     });
     
-    await alert.present();
-  }
+    message += `\n *Grand Total: ₹${this.cart.totalPrice}*`;
+    message += `\n Please confirm my order!`;
 
-  checkout() {
-    this.toast.info(`Total: ₹${this.cart.totalPrice} - Checkout coming soon!`);
+    const encodedMsg = encodeURIComponent(message);
+    window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
   }
 }

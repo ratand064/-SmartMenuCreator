@@ -1,18 +1,19 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" class="glass-tab-bar">
     <ion-tab-button tab="creator">
       <ion-icon name="add-circle"></ion-icon>
-      <ion-label>Creator</ion-label>
+      <ion-label>Create</ion-label>
     </ion-tab-button>
-    
     <ion-tab-button tab="menu">
       <ion-icon name="restaurant"></ion-icon>
       <ion-label>Menu</ion-label>
     </ion-tab-button>
-    
-    <ion-tab-button tab="cart">
+    <ion-tab-button tab="cart" [class.bump]="isAnimating">
       <ion-icon name="cart"></ion-icon>
       <ion-label>Cart</ion-label>
+      <ion-badge color="danger" *ngIf="(cartService.cartCount$ | async) as count">
+        {{ count }}
+      </ion-badge>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

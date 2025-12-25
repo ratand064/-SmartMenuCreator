@@ -1,1 +1,96 @@
+.glass-tab-bar {
+  position: fixed;
+  bottom: 20px; 
+  left: 20px;
+  right: 20px;
+  height: 64px;
+  border-radius: 24px; 
+  background: rgba(30, 30, 30, 0.85); 
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --background: transparent;
+  --border: 0;
+  padding: 0 10px;
+  contain: none; 
+}
 
+ion-tab-button {
+  --background: transparent;
+  --color: #888;
+  --color-selected: #fff;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+ion-tab-button ion-icon {
+  font-size: 24px;
+  margin-bottom: 2px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+ion-tab-button ion-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+ion-tab-button.tab-selected ion-icon {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.6));
+  color: var(--ion-color-primary);
+}
+
+ion-tab-button.tab-selected ion-label {
+  color: var(--ion-color-primary);
+}
+
+ion-badge {
+  position: absolute;
+  top: 8px;
+  right: calc(50% - 18px);
+  --background: #EB445A;
+  --color: white;
+  font-size: 10px;
+  font-weight: 800;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  border: 2px solid #1e1e1e; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.bump ion-icon {
+  animation: cartBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes cartBounce {
+  0% { transform: scale(1); }
+  50% { 
+    transform: scale(1.4); 
+    filter: drop-shadow(0 0 12px var(--ion-color-primary));
+  }
+  100% { transform: scale(1); }
+}
+
+@media (min-width: 1024px) {
+  ion-tabs {
+    display: flex;
+    justify-content: center;
+  }
+
+  ion-tab-bar.glass-tab-bar {
+    position: fixed;
+    max-width: 420px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

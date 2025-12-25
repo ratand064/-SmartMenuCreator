@@ -1,0 +1,27 @@
+// Custom Skeleton Styling
+ion-skeleton-text {
+  --background: rgba(255, 255, 255, 0.05); /* Dark base */
+  --background-rgb: 255, 255, 255;
+  --border-radius: 4px;
+}
+
+// Menu Card
+.skeleton-card {
+  background: #1e1e1e;
+  border-radius: 16px;
+  margin: 8px;
+  border: 1px solid #333;
+  box-shadow: none;
+  
+  .content {
+    padding: 12px;
+  }
+}
+
+// Cart Item
+.skeleton-item {
+  --background: #1e1e1e;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  border: 1px solid #333;
+}

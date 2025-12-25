@@ -7,30 +7,30 @@ const { generateFoodImage } = require('../utils/aiService');
 router.post('/extract', extractFromText);
 
 // Generate AI image
-router.post('/generate-image', async (req, res) => {
-  try {
-    const { dishName } = req.body;
+// router.post('/generate-image', async (req, res) => {
+//   try {
+//     const { dishName } = req.body;
     
-    if (!dishName) {
-      return res.status(400).json({
-        success: false,
-        error: 'Dish name required'
-      });
-    }
-    const imageUrl = await generateFoodImage(dishName);
+//     if (!dishName) {
+//       return res.status(400).json({
+//         success: false,
+//         error: 'Dish name required'
+//       });
+//     }
+//     const imageUrl = await generateFoodImage(dishName);
     
-    res.json({
-      success: true,
-      imageUrl
-    });
+//     res.json({
+//       success: true,
+//       imageUrl
+//     });
     
-  } catch (error) {
-    console.error('Image generation error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to generate image'
-    });
-  }
-});
+//   } catch (error) {
+//     console.error('Image generation error:', error);
+//     res.status(500).json({
+//       success: false,
+//       error: 'Failed to generate image'
+//     });
+//   }
+// });
 
 module.exports = router;

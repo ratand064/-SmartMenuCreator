@@ -1,0 +1,373 @@
+ion-content {
+  --background: #121212; 
+  --color: #ffffff;
+}
+
+.custom-toolbar {
+  --background: #121212;
+  --border-width: 0;
+  padding-top: 10px;
+}
+
+.main-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.main-title span {
+  color: var(--ion-color-primary); 
+  font-style: italic;
+}
+
+.input-section {
+  margin-bottom: 30px;
+}
+
+.hint-text {
+  color: #888;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  margin-left: 4px;
+  letter-spacing: 0.5px;
+}
+
+.custom-textarea {
+  --background: #1e1e1e;
+  border-radius: 20px;
+  border: 2px solid #2a2a2a;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 18px;
+  --padding-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-textarea.ion-focused {
+  border-color: var(--ion-color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2), 0 8px 32px rgba(0,0,0,0.5);
+  transform: translateY(-2px);
+}
+
+.custom-textarea::part(native)::placeholder {
+  color: #666;
+  opacity: 1;
+}
+
+.mic-col {
+  padding-right: 12px;
+}
+
+.mic-btn {
+  height: 56px; 
+  width: 100%;
+  margin: 0;
+  --border-radius: 18px;
+  --color: #666;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --background: linear-gradient(135deg, #1a1a1a 0%, #1f1f1f 100%);
+  position: relative;
+  border: 2px solid #2a2a2a;
+  border-radius: 18px;
+}
+
+.mic-btn.mic-active {
+  --color: #4facfe;
+  --background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(0, 242, 254, 0.25) 100%);
+  border: 2px solid #4facfe;
+  border-radius: 18px;
+}
+
+.mic-btn.mic-active ion-icon {
+  transform: scale(1.15);
+  animation: icon-pulse 1.5s ease-in-out infinite;
+  color: #4facfe;
+}
+
+.recording-text {
+  color: #4facfe;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.result-card {
+  margin-top: 30px;
+  background: #1e1e1e;
+  border-radius: 24px;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+
+.form-input-item {
+  --background: transparent;
+  --padding-start: 0;
+  margin-bottom: 12px; 
+}
+
+.form-input-item ion-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  letter-spacing: 1px;
+  margin-bottom: 6px; 
+}
+
+.form-input-item ion-input,
+.form-input-item ion-textarea {
+  font-weight: 600;
+  color: #eee;
+  --padding-start: 0;
+}
+
+.title-input {
+  margin-bottom: 10px; 
+}
+
+.title-input ion-input {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.price-input {
+  margin-bottom: 0; 
+}
+
+.price-input ion-input {
+  font-size: 24px;
+  color: var(--ion-color-success);
+  font-weight: 800;
+}
+
+.image-options-empty {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid #333;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 4px;
+}
+
+.empty-option-btn {
+  height: 56px;
+  --border-radius: 16px;
+  --border-width: 2px;
+  --border-color: #333;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.empty-option-btn .btn-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.empty-option-btn:hover {
+  --border-color: var(--ion-color-primary);
+}
+
+.hero-image-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.hero-image-container .image-loader {
+  text-align: center;
+}
+
+.hero-image-container .image-loader p {
+  font-size: 12px;
+  color: #888;
+  margin-top: 10px;
+  letter-spacing: 1px;
+}
+
+.hero-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.options-grid {
+  border-top: 1px solid #333;
+  background: #252525;
+}
+
+.separator-col {
+  border-right: 1px solid #333;
+}
+
+.option-btn {
+  height: 54px;
+  --color: #bbb;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.option-btn .btn-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.save-btn {
+  margin-top: 25px;
+  height: 56px;
+  --border-radius: 18px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1.15); }
+  50% { transform: scale(1.3); }
+}
+
+.fade-in {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.spacer { 
+  height: 50px; 
+}
+
+@media (min-width: 1024px) {
+  ion-content {
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+
+  ion-content > * {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .custom-toolbar {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .main-title {
+    font-size: 28px;
+  }
+
+  .input-section {
+    margin-top: 30px;
+  }
+
+  .custom-textarea {
+    font-size: 17px;
+  }
+
+  ion-grid {
+    margin-top: 10px;
+  }
+
+  .mic-btn {
+    height: 60px;
+  }
+
+  .process-btn {
+    height: 60px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .result-card {
+    margin-top: 40px;
+  }
+
+  .hero-image-container {
+    height: 320px;
+    border-radius: 20px;
+  }
+
+  .options-grid ion-button {
+    height: 60px;
+    font-size: 14px;
+  }
+
+  .save-btn {
+    height: 60px;
+    font-size: 17px;
+  }
+
+  .spacer {
+    height: 80px;
+  }
+}
+
+@media (max-width: 767px) {
+  ion-grid {
+    width: 100%;
+  }
+
+  ion-row {
+    align-items: center;
+  }
+
+  .mic-col {
+    padding-right: 8px;
+  }
+
+  .mic-btn {
+    height: 52px;
+    --border-radius: 14px;
+    border-radius: 14px;
+  }
+
+  .process-btn {
+    height: 52px;
+    --border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .process-btn .btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  ion-col[size="9"] {
+    display: flex;
+    align-items: stretch;
+  }
+
+  ion-col[size="9"] ion-button {
+    width: 100%;
+  }
+}
