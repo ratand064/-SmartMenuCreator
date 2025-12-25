@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cart</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="cart && cart.items.length > 0">
+    <ion-list>
+      <ion-item *ngFor="let item of cart.items">
+        <ion-thumbnail slot="start">
+          <img [src]="item.menuItem.imageUrl || 'assets/placeholder.jpg'" />
+        </ion-thumbnail>
+        
+        <ion-label>
+          <h2>{{item.menuItem.title}}</h2>
+          <p>₹{{item.menuItem.price}} x {{item.quantity}}</p>
+          <p><strong>₹{{item.menuItem.price * item.quantity}}</strong></p>
+        </ion-label>
+        
+        <ion-button slot="end" fill="clear" color="danger" (click)="removeItem(item.menuItem._id)">
+          <ion-icon name="trash" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+    
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-label class="ion-text-end">
+          <h2><strong>Total: ₹{{cart.totalPrice}}</strong></h2>
+        </ion-label>
+      </ion-item>
+      
+      <ion-button expand="block" color="success" (click)="checkout()">
+        <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+        Checkout
+      </ion-button>
+      
+      <ion-button expand="block" fill="outline" color="danger" (click)="clearCart()">
+        <ion-icon name="close-circle" slot="start"></ion-icon>
+        Clear Cart
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!cart || cart.items.length === 0">
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="cart-outline" size="large" color="medium"></ion-icon>
+      <h2>Your cart is empty</h2>
+      <p>Add items from the menu!</p>
+      <ion-button routerLink="/tabs/menu">Browse Menu</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner></ion-spinner>
+  </div>
+</ion-content>

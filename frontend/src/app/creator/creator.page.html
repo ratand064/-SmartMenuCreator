@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Create Item</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-textarea 
+          [(ngModel)]="inputText" 
+          placeholder="E.g., Spicy chicken curry with rice for 12"
+          rows="3">
+        </ion-textarea>
+      </ion-item>
+      <ion-button expand="block" (click)="processAI()" [disabled]="loading">
+        <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+        <span *ngIf="!loading">Process with AI</span>
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="parsedItem">
+    <ion-card-header>
+      <ion-card-title>Parsed Item</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Title</ion-label>
+        <ion-input [(ngModel)]="parsedItem.title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Description</ion-label>
+        <ion-textarea [(ngModel)]="parsedItem.description"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Price</ion-label>
+        <ion-input type="number" [(ngModel)]="parsedItem.price"></ion-input>
+      </ion-item>
+      
+      <!-- Image Preview -->
+      <ion-img *ngIf="parsedItem.imageUrl" [src]="parsedItem.imageUrl"></ion-img>
+      
+      <!-- Image Options -->
+      <ion-button expand="block" (click)="generateImage()" [disabled]="imageLoading">
+        <ion-spinner *ngIf="imageLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!imageLoading">Generate AI Image</span>
+      </ion-button>
+      
+      <ion-button expand="block" (click)="fileInput.click()">
+        <ion-icon name="camera" slot="start"></ion-icon>
+        Upload Photo
+      </ion-button>
+      <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden>
+      
+      <ion-button expand="block" color="success" (click)="saveItem()">Save Item</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
