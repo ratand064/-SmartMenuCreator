@@ -49,6 +49,7 @@ export class MenuPage implements OnInit {
   selectedCategory: string = 'all';
   selectedPriceRange: string = 'all';
   showFilterModal: boolean = false;
+  
   categories = [
     { value: 'all', label: 'All', icon: 'restaurant' },
     { value: 'veg', label: 'Veg', icon: 'leaf' },
@@ -159,13 +160,12 @@ export class MenuPage implements OnInit {
     });
   }
 
-  // Filter by category
+  // Filter Logic
   selectCategory(category: string) {
     this.selectedCategory = category;
     this.applyFilters();
   }
 
-  // Filter by price range
   selectPriceRange(range: string) {
     this.selectedPriceRange = range;
     this.applyFilters();
@@ -175,18 +175,15 @@ export class MenuPage implements OnInit {
     this.showFilterModal = !this.showFilterModal;
   }
 
-  // Apply all filters
   applyFilters(searchQuery?: string) {
     let filtered = [...this.menuItems];
 
-    // Category filter
     if (this.selectedCategory !== 'all') {
       filtered = filtered.filter(item => 
         item.category?.toLowerCase() === this.selectedCategory.toLowerCase()
       );
     }
 
-    // Price range filter
     if (this.selectedPriceRange !== 'all') {
       const priceRange = this.priceRanges.find(r => r.value === this.selectedPriceRange);
       if (priceRange) {
@@ -196,7 +193,6 @@ export class MenuPage implements OnInit {
       }
     }
 
-    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(item => 
@@ -230,21 +226,34 @@ export class MenuPage implements OnInit {
     });
   }
 
-async shareItem(item: any) {
-  const appLink = `${window.location.origin}/menu`;
-  const message = `🔥 *${item.title}*\n💰 ₹${item.price}\n\n👉 Order here: ${appLink}`;
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-}
-  fallbackWhatsAppShare(item: any, appLink: string, imageUrl: string) {
-    const message = imageUrl 
-      ? `🔥 *Check out this dish!* \n\n*${item.title}*\n💰 Price: *₹${item.price}*\n\n📸 ${imageUrl}\n\n👉 Order here: ${appLink}`
-      : `🔥 *Check out this dish!* \n\n*${item.title}*\n💰 Price: *₹${item.price}*\n\n👉 Order here: ${appLink}`;
+  // --- UPDATED SHARE LOGIC FOR PHONE ---
+  async shareItem(item: any) {
+    // URL ab '/tabs/menu' point karega jo aapka sahi route hai
+    const appLink = `${window.location.origin}/tabs/menu`;
     
+    const message = `🔥 *${item.title}*\n` +
+                    `😋 *Taste It Now!*\n` +
+                    `💰 Price: ₹${item.price}\n\n` +
+                    `👉 *Order Here:* ${appLink}`;
+
+    // Encode URI Component zaroori hai special characters ke liye
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    
+    // '_system' use karein taaki browser/app bahar open ho
+    window.open(whatsappUrl, '_system');
   }
 
+  // Fallback function (Agar image ke saath bhejna ho kabhi)
+  fallbackWhatsAppShare(item: any, appLink: string, imageUrl: string) {
+    const message = imageUrl 
+      ? `🔥 *${item.title}*\n💰 ₹${item.price}\n📸 ${imageUrl}\n\n👉 Order: ${appLink}`
+      : `🔥 *${item.title}*\n💰 ₹${item.price}\n\n👉 Order: ${appLink}`;
+    
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_system');
+  }
+
+  // Admin Functions
   async editItem(item: any) {
     const alert = await this.alertCtrl.create({
       header: 'Edit Item',

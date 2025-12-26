@@ -5,8 +5,7 @@ import { SkeletonLoaderComponent } from '../components/skeleton-loader/skeleton-
 import { 
   IonContent, IonHeader, IonToolbar, IonTitle, 
   IonItem, IonLabel, IonButton, IonIcon, 
-  IonSpinner, IonList, IonThumbnail, IonFooter,
-  AlertController,IonButtons
+  IonList, IonThumbnail, IonButtons
 } from '@ionic/angular/standalone';
 
 import { ApiService } from '../services/api.service';
@@ -25,7 +24,7 @@ import { trash, add, remove, logoWhatsapp, bagCheck } from 'ionicons/icons';
     SkeletonLoaderComponent, 
     IonContent, IonHeader, IonToolbar, IonTitle, 
     IonItem, IonLabel, IonButton, IonIcon,
-    IonList, IonThumbnail,IonButtons
+    IonList, IonThumbnail, IonButtons,
   ]
 })
 export class CartPage implements OnInit {
@@ -36,7 +35,6 @@ export class CartPage implements OnInit {
     private api: ApiService,
     public cartService: CartService,
     private toast: ToastService,
-    private alertCtrl: AlertController,
     private router: Router
   ) {
     addIcons({ trash, add, remove, 'logo-whatsapp': logoWhatsapp, 'bag-check': bagCheck });
@@ -67,7 +65,6 @@ export class CartPage implements OnInit {
       },
       error: () => {
         this.loading = false;
-        this.toast.error('Failed to load cart');
       }
     });
   }
@@ -84,7 +81,7 @@ export class CartPage implements OnInit {
       let newQty = Number(item.quantity);
       if (action === 'add') {
         newQty += 1;
-        this.toast.success('Quantity increased! ➕');
+        this.toast.success('Quantity increased ➕');
       } else {
         newQty -= 1;
         this.toast.info('Quantity decreased ➖');
@@ -125,7 +122,7 @@ export class CartPage implements OnInit {
           this.cart.items = this.cart.items.filter((i: any) => i.menuItem._id !== menuItemId);
           this.recalculateTotal();
           this.cartService.updateCartCount(this.cart.items.length);
-          this.toast.success('Item removed from cart 🗑️');
+          this.toast.success('Item removed 🗑️');
         }
       },
       error: () => {
@@ -135,23 +132,30 @@ export class CartPage implements OnInit {
   }
 
   checkoutViaWhatsApp() {
-    if (!this.cart || this.cart.items.length === 0) {
+    if (!this.cart || !this.cart.items || this.cart.items.length === 0) {
       this.toast.error('Cart is empty! Add items first 🛒');
       return;
     }
 
-    let message = "Hi! I'd like to place an order via YumBlock:\n\n";
+    let message = "👋 *New Order Request*\n\n";
+    
     this.cart.items.forEach((item: any, index: number) => {
       const qty = Number(item.quantity) || 1;
       const price = Number(item.price) || Number(item.menuItem?.price) || 0;
+      // Item Line: "1. Burger x 2 - ₹200"
       message += `${index + 1}. ${item.menuItem.title} x ${qty} - ₹${price * qty}\n`;
     });
     
-    message += `\n *Grand Total: ₹${this.cart.totalPrice}*`;
-    message += `\n Please confirm my order!`;
+    message += `\n💰 *Grand Total: ₹${this.cart.totalPrice}*`;
+    message += `\n\n📍 Please confirm my order!`;
 
     const encodedMsg = encodeURIComponent(message);
-    window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
-    this.toast.success('Opening WhatsApp... 💬');
+    const whatsappUrl = `https://wa.me/?text=${encodedMsg}`;
+    
+    // IMPORTANT: '_system' 
+    window.open(whatsappUrl, '_system');
+    
+    // Toast confirmation
+    // this.toast.success('Opening WhatsApp... 💬');
   }
 }
