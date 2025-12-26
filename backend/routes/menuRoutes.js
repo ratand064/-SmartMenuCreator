@@ -19,4 +19,5 @@ router.post('/', protect, merchantOnly, createMenuItem);
 router.put('/:id', protect, merchantOnly, updateMenuItem); 
 router.delete('/:id', protect, merchantOnly, deleteMenuItem);
 
+
 module.exports = router;

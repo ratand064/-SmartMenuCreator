@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Groq = require('groq-sdk');
 
-/* ---------- HELPER FUNCTIONS ---------- */
+/*HELPER FUNCTIONS */
 
 function extractPriceFromText(text) {
   const patterns = [
@@ -70,7 +70,7 @@ function normalizeDishName(text) {
     .join(' ') || 'Special Dish';
 }
 
-/* ---------- FALLBACK SYSTEM (NO AI) ---------- */
+/*  FALLBACK SYSTEM (NO AI)  */
 
 function fallbackResponse(text) {
   try {
@@ -109,7 +109,7 @@ function fallbackResponse(text) {
   }
 }
 
-/* ---------- GROQ AI EXTRACTION ---------- */
+/*  GROQ AI EXTRACTION  */
 
 /**
  * Extract menu details using Groq AI
@@ -130,7 +130,7 @@ async function extractMenuDetails(userInput) {
 
     // Check if Groq API key exists
     if (!process.env.GROQ_API_KEY) {
-      console.log('⚠️ No Groq API key found, using smart fallback system');
+      console.log(' No Groq API key found, using smart fallback system');
       return fallbackResponse(cleanInput);
     }
 
@@ -198,7 +198,7 @@ EXAMPLES:
     const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
     
     if (!jsonMatch) {
-      console.warn('⚠️ Invalid JSON from AI, using fallback');
+      console.warn(' Invalid JSON from AI, using fallback');
       return fallbackResponse(cleanInput);
     }
 
@@ -239,7 +239,7 @@ EXAMPLES:
   }
 }
 
-/* ---------- AI IMAGE GENERATION (FIXED) ---------- */
+/*  AI IMAGE GENERATION (FIXED)  */
 
 /**
  * @param {string} dishName - Name of the dish
@@ -287,7 +287,7 @@ EXAMPLES:
 //   }
 // }
 
-/* ---------- WHATSAPP SHARE MESSAGE ---------- */
+/*  WHATSAPP SHARE MESSAGE  */
 
 /**
  * Generate WhatsApp share message with menu item details
@@ -311,10 +311,10 @@ Category: ${category}
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
-/* ---------- EXPORTS ---------- */
+/*  EXPORTS  */
 
 module.exports = {
   extractMenuDetails,
-  generateFoodImage,
+  // generateFoodImage,
   generateWhatsAppMessage,
 };

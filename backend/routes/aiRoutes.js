@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { extractFromText } = require('../controllers/aiController');
-const { generateFoodImage } = require('../utils/aiService');
 
 // Extract menu details
 router.post('/extract', extractFromText);
