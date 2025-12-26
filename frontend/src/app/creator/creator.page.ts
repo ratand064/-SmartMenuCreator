@@ -107,23 +107,32 @@ export class CreatorPage implements OnInit, OnDestroy {
     });
   }
 
-  // AI IMAGE GENERATION (Manual Trigger) 
+  // AI IMAGE GENERATION
   generateImage() {
-    if (!this.parsedItem?.title) return;
+    if (!this.parsedItem?.title) {
+      this.toast.error('Please enter a dish name first');
+      return;
+    }
     this.imageLoading = true;
-    const dishName = this.parsedItem.title.toLowerCase().replace(/[^\w\s]/g, '').trim();
+    const dishName = this.parsedItem.title.trim();
     const seed = Math.floor(Math.random() * 1000000);
-    const prompt = encodeURIComponent(`professional food photography of ${dishName}, indian restaurant dish, appetizing, 4k`);
-    
-    const url = `https://image.pollinations.ai/prompt/${prompt}?width=800&height=600&nologo=true&seed=${seed}`;
-    this.toast.success("AI is painting... 🎨");
-
+    const promptText = `Professional food photography close up shot of ${dishName}, delicious, steaming hot, gourmet plating, depth of field, 8k resolution, studio lighting, magazine quality, appetizing`; 
+    const prompt = encodeURIComponent(promptText);
+    const url = `https://image.pollinations.ai/prompt/${prompt}?width=800&height=600&model=flux&nologo=true&seed=${seed}`;
+    this.toast.success("Cooking up an image... 🎨");
     const img = new Image();
-    img.onload = () => this.ngZone.run(() => { this.parsedItem.imageUrl = url; this.imageLoading = false; });
-    img.onerror = () => this.ngZone.run(() => {
-      this.parsedItem.imageUrl = `https://picsum.photos/seed/${dishName}${seed}/800/600`;
-      this.imageLoading = false;
+    img.onload = () => this.ngZone.run(() => { 
+      this.parsedItem.imageUrl = url; 
+      this.imageLoading = false; 
     });
+    
+    img.onerror = () => this.ngZone.run(() => {
+      // Fallback
+      this.parsedItem.imageUrl = `https://source.unsplash.com/800x600/?${encodeURIComponent(dishName)},food`;
+      this.imageLoading = false;
+      this.toast.error('AI busy, fetched from Unsplash');
+    });
+
     img.src = url;
   }
 
