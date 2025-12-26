@@ -230,37 +230,13 @@ export class MenuPage implements OnInit {
     });
   }
 
-  async shareItem(item: any) {
-    const appLink = window.location.origin + '/tabs/menu'; 
-    const imageUrl = item.imageUrl || '';
-    
-    if (navigator.share) {
-      try {
-        if (imageUrl) {
-          const response = await fetch(imageUrl);
-          const blob = await response.blob();
-          const file = new File([blob], 'dish.jpg', { type: blob.type });
-          
-          await navigator.share({
-            title: item.title,
-            text: `🔥 ${item.title}\n💰 ₹${item.price}\n\n👉 Order here: ${appLink}`,
-            files: [file]
-          });
-        } else {
-          await navigator.share({
-            title: item.title,
-            text: `🔥 ${item.title}\n💰 ₹${item.price}\n\n👉 Order here: ${appLink}`
-          });
-        }
-        this.toast.success('Shared successfully! 🎉');
-      } catch (error) {
-        this.fallbackWhatsAppShare(item, appLink, imageUrl);
-      }
-    } else {
-      this.fallbackWhatsAppShare(item, appLink, imageUrl);
-    }
-  }
-
+ async shareItem(item: any) {
+  const appLink = window.location.origin + '/tabs/menu'; 
+  const imageUrl = item.imageUrl || '';
+  
+  // Direct WhatsApp share with image and link
+  this.fallbackWhatsAppShare(item, appLink, imageUrl);
+}
   fallbackWhatsAppShare(item: any, appLink: string, imageUrl: string) {
     const message = imageUrl 
       ? `🔥 *Check out this dish!* \n\n*${item.title}*\n💰 Price: *₹${item.price}*\n\n📸 ${imageUrl}\n\n👉 Order here: ${appLink}`
