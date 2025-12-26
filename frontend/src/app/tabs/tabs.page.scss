@@ -4,40 +4,48 @@ ion-tab-bar {
   left: 0 !important;
   right: 0 !important;
   width: 100% !important;
-  contain: none !important;
+  contain: layout !important;
   z-index: 99999 !important;
 }
+
 .glass-tab-bar {
   position: fixed !important; 
   bottom: 20px !important;
-  left: 20px !important;
-  right: 20px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
   width: calc(100% - 40px) !important; 
   height: 65px;
   border-radius: 35px; 
-  background: rgba(20, 20, 20, 0.85) !important; 
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: rgba(20, 20, 20, 0.95) !important; 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(255, 255, 255, 0.05);
 
   --background: transparent;
   --border: 0;
-  contain: none !important; 
+  contain: layout !important; 
 
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding-bottom: 0 !important; 
-  margin: 0 auto; 
+  margin: 0 !important; 
   
   z-index: 99999 !important;
   
-
-  transform: none !important;
   will-change: auto !important;
-}
+  
 
+  @media (min-width: 768px) {
+    width: 60% !important;
+    max-width: 600px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
 
 ion-content {
   --background: #121212;
@@ -47,61 +55,103 @@ ion-content {
 /* Tab Buttons */
 ion-tab-button {
   --background: transparent;
-  --color: #888;
-  --color-selected: #FFD700; 
+  --color: rgba(255, 255, 255, 0.5);
+//   --color-selected: #FFD700; 
   --ripple-color: transparent;
   background: transparent !important;
+  position: relative;
+  transition: all 0.3s ease;
 }
 
 /* Icons Animation */
 ion-tab-button ion-icon {
   font-size: 26px;
   margin-bottom: 2px;
-  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Selected Tab Effect */
-ion-tab-button.tab-selected ion-icon {
-  transform: translateY(-6px);
-  color: #FFD700;
-  filter: drop-shadow(0 4px 10px rgba(255, 215, 0, 0.5));
+
+ion-tab-button.tab-selected {
+  ion-icon {
+    transform: translateY(-6px) scale(1.1);
+    // color: #FFD700;
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.6))
+            drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+  }
+  
+  ion-label {
+    color: #FFD700;
+    font-weight: 700;
+  }
+}
+
+/* Hover Effect for Desktop */
+@media (min-width: 768px) {
+  ion-tab-button:hover:not(.tab-selected) {
+    ion-icon {
+      transform: translateY(-2px);
+      color: rgba(255, 215, 0, 0.7);
+    }
+  }
 }
 
 ion-tab-button ion-label {
   font-size: 10px;
   font-weight: 600;
   margin-top: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
 }
 
-/* Badge */
+/* Badge - Fixed positioning for all screens */
 ion-badge {
   position: absolute;
-  top: 8px;
-  right: 25%; 
-  --background: #ff3b30;
+  top: 6px;
+  right: calc(50% - 18px);
+  --background: linear-gradient(135deg, #ff3b30 0%, #ff1744 100%);
   --color: white;
   border-radius: 50%;
-  min-width: 18px;
-  height: 18px;
-  padding: 0;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
   border: 2px solid #1e1e1e;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.5);
   z-index: 10;
+  
+  // Desktop adjustment
+  @media (min-width: 768px) {
+    top: 8px;
+    right: calc(50% - 20px);
+    min-width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
 }
 
 /* Bounce Animation for Cart */
 .bump ion-icon {
-  animation: bounce 0.4s ease-in-out;
+  animation: bounce 0.5s ease-in-out;
 }
 
 @keyframes bounce {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.4); }
-  100% { transform: scale(1); }
+  0%, 100% { 
+    transform: scale(1) translateY(0); 
+  }
+  25% { 
+    transform: scale(1.2) translateY(-4px); 
+  }
+  50% { 
+    transform: scale(0.9) translateY(0); 
+  }
+  75% { 
+    transform: scale(1.1) translateY(-2px); 
+  }
 }
 
 // Additional fix for iOS Safari
@@ -115,4 +165,21 @@ ion-badge {
 // Spacer at bottom of pages
 .spacer { 
   height: 100px; 
+}
+
+
+ion-tab-button.tab-selected::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #FFD700 50%, 
+    transparent 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
 }
