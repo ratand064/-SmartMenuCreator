@@ -1,11 +1,11 @@
 .glass-tab-bar {
-  position: fixed;
-  bottom: 20px; 
+  position: absolute; /* Fixed ki jagah Absolute try karein Ionic ke andar */
+  bottom: 20px;
   left: 20px;
   right: 20px;
   height: 64px;
-  border-radius: 24px; 
-  background: rgba(30, 30, 30, 0.85); 
+  border-radius: 24px;
+  background: rgba(30, 30, 30, 0.85);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -13,9 +13,17 @@
   --background: transparent;
   --border: 0;
   padding: 0 10px;
-  contain: layout; 
-  z-index: 1000; 
+  
+  /* Ye line hatayein (contain: layout) kyunki ye fixed elements ko tod sakti hai */
+  /* contain: layout; */ 
+  
+  z-index: 9999; /* Z-index high rakhein */
+  
+  /* GPU Acceleration force karein taaki scroll karte waqt glitch na ho */
+  transform: translateZ(0); 
 }
+
+/* Baki CSS same rahega... */
 ion-tab-button {
   --background: transparent;
   --color: #888;
@@ -48,19 +56,20 @@ ion-tab-button.tab-selected ion-label {
   color: var(--ion-color-primary);
 }
 
+/* Badge Styling Updated */
 ion-badge {
   position: absolute;
   top: 8px;
-  right: calc(50% - 18px);
+  right: calc(50% - 15px); /* Thoda adjust kiya center hone ke liye */
   --background: #EB445A;
   --color: white;
   font-size: 10px;
   font-weight: 800;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 5px;
-  border-radius: 10px;
-  border: 2px solid #1e1e1e; 
+  min-width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #1e1e1e;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
@@ -86,11 +95,10 @@ ion-badge {
     display: flex;
     justify-content: center;
   }
-
   ion-tab-bar.glass-tab-bar {
-    position: fixed;
+    position: absolute;
     max-width: 420px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
   }
 }
