@@ -19,13 +19,75 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar class="search-toolbar">
-    <ion-searchbar 
-      class="custom-search"
-      placeholder="Search for dishes..." 
-      search-icon="search"
-      (ionInput)="filterItems($event)">
-    </ion-searchbar>
+    <div class="search-filter-container">
+      <ion-searchbar 
+        class="custom-search"
+        placeholder="Search for dishes..." 
+        search-icon="search"
+        (ionInput)="filterItems($event)">
+      </ion-searchbar>
+      <ion-button 
+        class="filter-btn" 
+        fill="clear"
+        (click)="toggleFilterModal()">
+        <ion-icon 
+          name="funnel-outline" 
+          [color]="selectedCategory !== 'all' || selectedPriceRange !== 'all' ? 'primary' : 'medium'">
+        </ion-icon>
+      </ion-button>
+    </div>
   </ion-toolbar>
+  <div class="filter-dropdown" *ngIf="showFilterModal">
+    <div class="filter-backdrop" (click)="toggleFilterModal()"></div>
+    <div class="filter-content">
+      <div class="filter-header">
+        <h3>Filters</h3>
+        <ion-button fill="clear" size="small" (click)="toggleFilterModal()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </div>
+      
+      <!-- Category Filter Section -->
+      <div class="filter-section">
+        <div class="filter-section-title">Category</div>
+        <div class="filter-options">
+          <div 
+            *ngFor="let cat of categories" 
+            class="filter-option"
+            [class.selected]="selectedCategory === cat.value"
+            (click)="selectCategory(cat.value)">
+            <ion-icon [name]="cat.icon"></ion-icon>
+            <span>{{ cat.label }}</span>
+            <ion-icon 
+              *ngIf="selectedCategory === cat.value" 
+              name="checkmark-circle" 
+              class="check-icon">
+            </ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Filter Section -->
+      <div class="filter-section">
+        <div class="filter-section-title">Price Range</div>
+        <div class="filter-options">
+          <div 
+            *ngFor="let range of priceRanges" 
+            class="filter-option"
+            [class.selected]="selectedPriceRange === range.value"
+            (click)="selectPriceRange(range.value)">
+            <ion-icon [name]="range.icon"></ion-icon>
+            <span>{{ range.label }}</span>
+            <ion-icon 
+              *ngIf="selectedPriceRange === range.value" 
+              name="checkmark-circle" 
+              class="check-icon">
+            </ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-header>
 <ion-content [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="loadMenu($event)">
@@ -73,7 +135,7 @@
       <ion-icon name="search"></ion-icon>
     </div>
     <h3>No dishes found</h3>
-    <p>Try searching for something else!</p>
+    <p>Try adjusting your filters!</p>
   </div>
   <div class="spacer"></div>
 </ion-content>

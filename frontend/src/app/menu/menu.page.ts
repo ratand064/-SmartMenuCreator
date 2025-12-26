@@ -8,7 +8,7 @@ import {
   IonContent, IonHeader, IonToolbar, IonTitle,
   IonButton, IonIcon, IonImg, IonGrid, IonRow, 
   IonCol, IonRefresher, IonRefresherContent, IonSearchbar, 
-  IonButtons, AlertController 
+  IonButtons, AlertController
 } from '@ionic/angular/standalone';
 
 import { ApiService } from '../services/api.service';
@@ -18,7 +18,9 @@ import { ShareService } from '../services/share.service';
 import { addIcons } from 'ionicons';
 import { 
   logoWhatsapp, search, trash, create, 
-  personCircle, personCircleOutline, add, sparkles, checkmarkCircle
+  personCircle, personCircleOutline, add, sparkles, 
+  checkmarkCircle, fastFood, pizza, cafe, iceCream, 
+  restaurant, funnelOutline, leaf, close, walletOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -43,6 +45,26 @@ export class MenuPage implements OnInit {
   isAdminMode: boolean = false;
   isLoggedIn: boolean = false;
 
+  // Filter properties
+  selectedCategory: string = 'all';
+  selectedPriceRange: string = 'all';
+  showFilterModal: boolean = false;
+  categories = [
+    { value: 'all', label: 'All', icon: 'restaurant' },
+    { value: 'veg', label: 'Veg', icon: 'leaf' },
+    { value: 'non-veg', label: 'Non-Veg', icon: 'fast-food' },
+    { value: 'dessert', label: 'Dessert', icon: 'ice-cream' },
+    { value: 'beverage', label: 'Drinks', icon: 'cafe' }
+  ];
+
+  priceRanges = [
+    { value: 'all', label: 'All Prices', icon: 'wallet-outline', min: 0, max: Infinity },
+    { value: 'under100', label: 'Under ₹100', icon: 'wallet-outline', min: 0, max: 100 },
+    { value: '100-200', label: '₹100 - ₹200', icon: 'wallet-outline', min: 100, max: 200 },
+    { value: '200-500', label: '₹200 - ₹500', icon: 'wallet-outline', min: 200, max: 500 },
+    { value: 'above500', label: 'Above ₹500', icon: 'wallet-outline', min: 500, max: Infinity }
+  ];
+
   constructor(
     private api: ApiService,
     public cartService: CartService, 
@@ -55,7 +77,10 @@ export class MenuPage implements OnInit {
       'logo-whatsapp': logoWhatsapp, search, 
       trash, create, 'person-circle': personCircle, 
       'person-circle-outline': personCircleOutline, add, sparkles,
-      'checkmark-circle': checkmarkCircle
+      'checkmark-circle': checkmarkCircle, 'fast-food': fastFood,
+      pizza, cafe, 'ice-cream': iceCream, restaurant,
+      'funnel-outline': funnelOutline, leaf, close,
+      'wallet-outline': walletOutline
     });
   }
 
@@ -121,7 +146,7 @@ export class MenuPage implements OnInit {
       next: (res) => {
         if (res.success) {
           this.menuItems = res.data;
-          this.filteredItems = res.data;
+          this.applyFilters();
         }
         this.loading = false;
         if (event) event.target.complete();
@@ -134,12 +159,62 @@ export class MenuPage implements OnInit {
     });
   }
 
+  // Filter by category
+  selectCategory(category: string) {
+    this.selectedCategory = category;
+    this.applyFilters();
+  }
+
+  // Filter by price range
+  selectPriceRange(range: string) {
+    this.selectedPriceRange = range;
+    this.applyFilters();
+  }
+
+  toggleFilterModal() {
+    this.showFilterModal = !this.showFilterModal;
+  }
+
+  // Apply all filters
+  applyFilters(searchQuery?: string) {
+    let filtered = [...this.menuItems];
+
+    // Category filter
+    if (this.selectedCategory !== 'all') {
+      filtered = filtered.filter(item => 
+        item.category?.toLowerCase() === this.selectedCategory.toLowerCase()
+      );
+    }
+
+    // Price range filter
+    if (this.selectedPriceRange !== 'all') {
+      const priceRange = this.priceRanges.find(r => r.value === this.selectedPriceRange);
+      if (priceRange) {
+        filtered = filtered.filter(item => 
+          item.price >= priceRange.min && item.price < priceRange.max
+        );
+      }
+    }
+
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        (item.description && item.description.toLowerCase().includes(query))
+      );
+    }
+
+    this.filteredItems = filtered;
+  }
+
   filterItems(event: any) {
-    const query = event.target.value.toLowerCase();
-    this.filteredItems = query ? this.menuItems.filter(item => 
-      item.title.toLowerCase().includes(query) || 
-      (item.description && item.description.toLowerCase().includes(query))
-    ) : this.menuItems;
+    const query = event.target.value;
+    if (!query || query.trim() === '') {
+      this.applyFilters();
+    } else {
+      this.applyFilters(query);
+    }
   }
 
   addToCart(item: any) {
@@ -155,18 +230,58 @@ export class MenuPage implements OnInit {
     });
   }
 
-  shareItem(item: any) {
+  async shareItem(item: any) {
     const appLink = window.location.origin + '/tabs/menu'; 
-    const message = `🔥 *Check out this dish!* \n\n*${item.title}*\n💰 Price: *₹${item.price}*\n\n👉 Order here: ${appLink}`;
+    const imageUrl = item.imageUrl || '';
+    
+    if (navigator.share) {
+      try {
+        if (imageUrl) {
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], 'dish.jpg', { type: blob.type });
+          
+          await navigator.share({
+            title: item.title,
+            text: `🔥 ${item.title}\n💰 ₹${item.price}\n\n👉 Order here: ${appLink}`,
+            files: [file]
+          });
+        } else {
+          await navigator.share({
+            title: item.title,
+            text: `🔥 ${item.title}\n💰 ₹${item.price}\n\n👉 Order here: ${appLink}`
+          });
+        }
+        this.toast.success('Shared successfully! 🎉');
+      } catch (error) {
+        this.fallbackWhatsAppShare(item, appLink, imageUrl);
+      }
+    } else {
+      this.fallbackWhatsAppShare(item, appLink, imageUrl);
+    }
+  }
+
+  fallbackWhatsAppShare(item: any, appLink: string, imageUrl: string) {
+    const message = imageUrl 
+      ? `🔥 *Check out this dish!* \n\n*${item.title}*\n💰 Price: *₹${item.price}*\n\n📸 ${imageUrl}\n\n👉 Order here: ${appLink}`
+      : `🔥 *Check out this dish!* \n\n*${item.title}*\n💰 Price: *₹${item.price}*\n\n👉 Order here: ${appLink}`;
+    
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   }
+
   async editItem(item: any) {
     const alert = await this.alertCtrl.create({
       header: 'Edit Item',
       inputs: [
         { name: 'title', value: item.title, placeholder: 'Title' },
-        { name: 'price', value: item.price, type: 'number', placeholder: 'Price' }
+        { name: 'price', value: item.price, type: 'number', placeholder: 'Price' },
+        { 
+          name: 'category', 
+          value: item.category, 
+          type: 'text',
+          placeholder: 'Category (veg/non-veg/dessert/beverage)' 
+        }
       ],
       buttons: [
         { text: 'Cancel', role: 'cancel' },
