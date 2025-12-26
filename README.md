@@ -57,20 +57,16 @@ YumBlock challenged developers to build a revolutionary menu management system w
 
 ### **Frontend (Ionic + Angular)**
 ```
-src/
-├── app/
-│   ├── home/                    # Landing page with dual portals
-│   ├── pages/
-│   │   ├── menu/                # Public menu browsing
-│   │   ├── cart/                # Shopping cart management
-│   │   ├── creator/             # AI-powered item creation
-│   │   └── item-detail/         # Product detail view
-│   ├── login/                   # Merchant authentication
-│   └── services/
-│       ├── api.service.ts       # HTTP client + API wrapper
-│       ├── cart.service.ts      # Cart state management
-│       ├── share.service.ts     # WhatsApp integration
-│       └── auth.interceptor.ts  # JWT token handling
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── cart/
+│   │   │   ├── components/
+│   │   │   │   └── skeleton-loader/
+│   │   │   ├── creator/
+│   │   │   ├── login/
+│   │   │   ├── menu/
+│   │   │   ├── services/
+│   │   │   ├── tabs/
 ```
 
 ### **Backend (Node.js + Express + MongoDB)**
