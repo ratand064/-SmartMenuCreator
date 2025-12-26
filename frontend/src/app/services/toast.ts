@@ -14,10 +14,12 @@ export class ToastService {
       duration: 2000,
       color: 'success',
       position: 'top',
-      icon: 'checkmark-circle'
+      icon: 'checkmark-circle',
+      cssClass: 'custom-toast'
     });
-    toast.present();
+    await toast.present();
   }
+  
 
   async error(message: string) {
     const toast = await this.toastCtrl.create({
@@ -25,9 +27,10 @@ export class ToastService {
       duration: 3000,
       color: 'danger',
       position: 'top',
-      icon: 'close-circle'
+      icon: 'close-circle',
+      cssClass: 'custom-toast'
     });
-    toast.present();
+    await toast.present();
   }
 
   async info(message: string) {
@@ -35,8 +38,9 @@ export class ToastService {
       message,
       duration: 2000,
       color: 'primary',
-      position: 'top'
+      position: 'top',
+      cssClass: 'custom-toast'
     });
-    toast.present();
+    await toast.present();
   }
 }

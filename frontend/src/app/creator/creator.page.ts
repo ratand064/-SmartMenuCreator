@@ -131,7 +131,7 @@ export class CreatorPage implements OnInit, OnDestroy {
     event.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600';
   }
 
-  // IMAGE COMPRESSION (Fixes 413 Error) 
+  // IMAGE COMPRESSION  
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;

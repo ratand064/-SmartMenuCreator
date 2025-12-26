@@ -13,9 +13,9 @@
   --background: transparent;
   --border: 0;
   padding: 0 10px;
-  contain: none; 
+  contain: layout; 
+  z-index: 1000; 
 }
-
 ion-tab-button {
   --background: transparent;
   --color: #888;

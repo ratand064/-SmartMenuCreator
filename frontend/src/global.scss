@@ -88,3 +88,14 @@ ion-textarea.custom-textarea {
   --color: #ff6b6b;
   border: 1px solid #ff6b6b;
 }
+.custom-toast {
+  --z-index: 99999 !important;
+  
+  &::part(container) {
+    top: 80px;
+  }
+}
+
+ion-toast {
+  z-index: 99999 !important;
+}

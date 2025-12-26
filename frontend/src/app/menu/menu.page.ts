@@ -230,12 +230,33 @@ export class MenuPage implements OnInit {
     });
   }
 
- async shareItem(item: any) {
+async shareItem(item: any) {
   const appLink = window.location.origin + '/tabs/menu'; 
   const imageUrl = item.imageUrl || '';
+  const message = `🔥 *${item.title}*\n💰 ₹${item.price}\n\n👉 Order here: ${appLink}`;
   
-  // Direct WhatsApp share with image and link
-  this.fallbackWhatsAppShare(item, appLink, imageUrl);
+  if (imageUrl) {
+    try {
+      // Image fetch 
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], 'dish.jpg', { type: blob.type });
+      await navigator.clipboard.writeText(message);
+      await navigator.share({
+        files: [file]
+      });
+      
+      this.toast.success('Image shared! Link copied - paste it 📋');
+    } catch (error) {
+      // Fallback: Direct WhatsApp with text only
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+  } else {
+    // No image - direct WhatsApp link
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  }
 }
   fallbackWhatsAppShare(item: any, appLink: string, imageUrl: string) {
     const message = imageUrl 
