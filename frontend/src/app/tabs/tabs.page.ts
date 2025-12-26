@@ -4,7 +4,7 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge } from '@
 import { addIcons } from 'ionicons';
 import { addCircle, restaurant, cart } from 'ionicons/icons';
 import { CartService } from '../services/cart.service';
-import { ApiService } from '../services/api.service'; // Import ApiService
+import { ApiService } from '../services/api.service'; 
 
 @Component({
   selector: 'app-tabs',
@@ -19,22 +19,19 @@ export class TabsPage implements OnInit {
 
   constructor(
     public cartService: CartService,
-    private api: ApiService // ApiService inject karein
+    private api: ApiService 
   ) {
     addIcons({ addCircle, restaurant, cart });
   }
 
   ngOnInit() {
-    // 1. App start hote hi Cart ka latest data fetch karein
+
     this.refreshCart();
 
-    // 2. Animation listener
     this.cartService.cartAnimation$.subscribe(() => {
       this.triggerBumpEffect();
     });
   }
-
-  // Jab bhi user Tabs page par wapas aaye, cart check karein
   ionViewWillEnter() {
     this.refreshCart();
   }
@@ -43,7 +40,6 @@ export class TabsPage implements OnInit {
     this.api.getCart().subscribe({
       next: (res: any) => {
         if (res.success && res.data && res.data.items) {
-          // Service me count update karein taaki badge show ho
           this.cartService.updateCartCount(res.data.items.length);
         }
       }

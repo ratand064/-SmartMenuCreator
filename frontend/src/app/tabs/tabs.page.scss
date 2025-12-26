@@ -1,5 +1,5 @@
 .glass-tab-bar {
-  position: absolute; /* Fixed ki jagah Absolute try karein Ionic ke andar */
+  position: absolute; 
   bottom: 20px;
   left: 20px;
   right: 20px;
@@ -14,16 +14,12 @@
   --border: 0;
   padding: 0 10px;
   
-  /* Ye line hatayein (contain: layout) kyunki ye fixed elements ko tod sakti hai */
-  /* contain: layout; */ 
-  
-  z-index: 9999; /* Z-index high rakhein */
-  
-  /* GPU Acceleration force karein taaki scroll karte waqt glitch na ho */
+
+  z-index: 9999; 
+
   transform: translateZ(0); 
 }
 
-/* Baki CSS same rahega... */
 ion-tab-button {
   --background: transparent;
   --color: #888;
@@ -56,11 +52,11 @@ ion-tab-button.tab-selected ion-label {
   color: var(--ion-color-primary);
 }
 
-/* Badge Styling Updated */
+/* Badge Styling*/
 ion-badge {
   position: absolute;
   top: 8px;
-  right: calc(50% - 15px); /* Thoda adjust kiya center hone ke liye */
+  right: calc(50% - 15px); 
   --background: #EB445A;
   --color: white;
   font-size: 10px;
