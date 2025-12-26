@@ -231,7 +231,7 @@ export class MenuPage implements OnInit {
   }
 
 async shareItem(item: any) {
-  const appLink = `${window.location.origin}/item/${item._id}`;
+  const appLink = `${window.location.origin}/menu`;
   const message = `🔥 *${item.title}*\n💰 ₹${item.price}\n\n👉 Order here: ${appLink}`;
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
   window.open(whatsappUrl, '_blank');
