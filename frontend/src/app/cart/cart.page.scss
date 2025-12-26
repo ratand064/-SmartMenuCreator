@@ -153,3 +153,10 @@ ion-list {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Desktop-specific adjustments */
+@media (min-width: 1024px) {
+  .floating-checkout-card {
+    width: 60%;
+    margin: 0 auto;
+  }
+}
