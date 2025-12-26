@@ -88,14 +88,41 @@ ion-textarea.custom-textarea {
   --color: #ff6b6b;
   border: 1px solid #ff6b6b;
 }
+// Toast Styling
 .custom-toast {
-  --z-index: 99999 !important;
+  --background: var(--ion-color-step-50, #f2f2f2);
+  --color: var(--ion-text-color, #000);
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   
-  &::part(container) {
-    top: 80px;
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 10px;
+  
+  &::part(message) {
+    padding: 12px 16px;
+  }
+  
+  &::part(icon) {
+    font-size: 24px;
+    margin-right: 8px;
   }
 }
 
-ion-toast {
-  z-index: 99999 !important;
+// Success toast
+.custom-toast.toast-success {
+  --background: #2dd36f;
+  --color: white;
+}
+
+// Error toast
+.custom-toast.toast-danger {
+  --background: #eb445a;
+  --color: white;
+}
+
+// Info toast
+.custom-toast.toast-primary {
+  --background: #3880ff;
+  --color: white;
 }

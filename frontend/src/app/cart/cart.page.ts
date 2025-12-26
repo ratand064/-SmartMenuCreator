@@ -65,7 +65,10 @@ export class CartPage implements OnInit {
         }
         this.loading = false;
       },
-      error: () => this.loading = false
+      error: () => {
+        this.loading = false;
+        this.toast.error('Failed to load cart');
+      }
     });
   }
 
@@ -79,8 +82,13 @@ export class CartPage implements OnInit {
     
     if (item) {
       let newQty = Number(item.quantity);
-      if (action === 'add') newQty += 1;
-      else newQty -= 1;
+      if (action === 'add') {
+        newQty += 1;
+        this.toast.success('Quantity increased! ➕');
+      } else {
+        newQty -= 1;
+        this.toast.info('Quantity decreased ➖');
+      }
       
       item.quantity = newQty;
       this.recalculateTotal();
@@ -105,6 +113,7 @@ export class CartPage implements OnInit {
          if(res.success) {
            this.cart = { items: [], totalPrice: 0 };
            this.cartService.updateCartCount(0);
+           this.toast.success('Cart cleared! 🗑️');
          }
        });
        return;
@@ -116,14 +125,20 @@ export class CartPage implements OnInit {
           this.cart.items = this.cart.items.filter((i: any) => i.menuItem._id !== menuItemId);
           this.recalculateTotal();
           this.cartService.updateCartCount(this.cart.items.length);
-          this.toast.success('Item removed');
+          this.toast.success('Item removed from cart 🗑️');
         }
+      },
+      error: () => {
+        this.toast.error('Failed to remove item');
       }
     });
   }
 
   checkoutViaWhatsApp() {
-    if (!this.cart || this.cart.items.length === 0) return;
+    if (!this.cart || this.cart.items.length === 0) {
+      this.toast.error('Cart is empty! Add items first 🛒');
+      return;
+    }
 
     let message = "Hi! I'd like to place an order via YumBlock:\n\n";
     this.cart.items.forEach((item: any, index: number) => {
@@ -137,5 +152,6 @@ export class CartPage implements OnInit {
 
     const encodedMsg = encodeURIComponent(message);
     window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+    this.toast.success('Opening WhatsApp... 💬');
   }
 }
