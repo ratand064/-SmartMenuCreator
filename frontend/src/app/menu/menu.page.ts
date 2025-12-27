@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SkeletonLoaderComponent } from '../components/skeleton-loader/skeleton-loader.component';
 import { ToastService } from '../services/toast';
 
+
 import { 
   IonContent, IonHeader, IonToolbar, IonTitle,
   IonButton, IonIcon, IonImg, IonGrid, IonRow, 
@@ -222,12 +223,12 @@ export class MenuPage implements OnInit {
     this.filteredItems = filtered;
   }
 
-  // --- IMAGE FALLBACK ---
-  handleImageError(event: any) {
-    event.target.src = 'assets/placeholder-food.png'; 
-    // Alternatively use a generic URL:
-    // event.target.src = 'https://placehold.co/600x400?text=YumBlock';
+ handleImageError(event: any) {
+  // Infinite loop rokne ke liye check
+  if (event.target.src !== 'assets/placeholder.png') {
+    event.target.src = 'assets/placeholder.png';
   }
+}
 
   // --- CART LOGIC ---
   addToCart(item: any) {

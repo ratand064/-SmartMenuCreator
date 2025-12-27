@@ -100,10 +100,15 @@
     <ion-row>
       <ion-col size="6" size-md="4" size-lg="3" *ngFor="let item of filteredItems">
         <div class="food-card fade-in">
-          <div class="image-wrapper">
-            <ion-img [src]="item.imageUrl || 'assets/placeholder.png'"></ion-img>
-            <div class="price-badge">₹{{ item.price }}</div>
-          </div>
+         <div class="image-wrapper">
+  <ion-img 
+    [src]="item.imageUrl || 'assets/placeholder.png'" 
+    (ionError)="handleImageError($event)"
+    [alt]="item.title">
+  </ion-img>
+  
+  <div class="price-badge">₹{{ item.price }}</div>
+</div>
           <div class="card-content-area">
             <div class="food-title">{{ item.title }}</div>
             <div class="food-desc">{{ item.description }}</div>
