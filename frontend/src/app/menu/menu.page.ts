@@ -47,7 +47,7 @@ export class MenuPage implements OnInit {
   isLoggedIn: boolean = false;
 
   // Filter properties
-  searchQuery: string = ''; // Stores current search text
+  searchQuery: string = ''; 
   selectedCategory: string = 'all';
   selectedPriceRange: string = 'all';
   showFilterModal: boolean = false;
@@ -150,7 +150,7 @@ export class MenuPage implements OnInit {
   }
 
   loadMenu(refresherEvent?: any) {
-    // Only show full skeleton loader if not refreshing via pull-to-refresh
+   
     if (!refresherEvent) this.loading = true;
 
     this.api.getAllMenuItems().subscribe({
@@ -224,13 +224,12 @@ export class MenuPage implements OnInit {
   }
 
  handleImageError(event: any) {
-  // Infinite loop rokne ke liye check
   if (event.target.src !== 'assets/placeholder.png') {
     event.target.src = 'assets/placeholder.png';
   }
 }
 
-  // --- CART LOGIC ---
+  // CART LOGIC
   addToCart(item: any) {
     this.api.addToCart(item._id).subscribe({
       next: (res) => {
