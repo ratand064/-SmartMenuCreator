@@ -16,6 +16,7 @@ ion-tab-bar.floating-tab-bar {
   position: sticky;
   bottom: 20px;
   z-index: 9999;
+   bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 ion-tab-button {
