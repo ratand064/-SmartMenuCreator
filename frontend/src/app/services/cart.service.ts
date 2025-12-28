@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs'; // Subject import karein
+import { BehaviorSubject, Subject } from 'rxjs'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  // Existing code...
   public cartCount$ = new BehaviorSubject<number>(0);
 
   //  NEW: Animation Trigger ke liye Subject

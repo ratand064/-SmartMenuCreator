@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 // INTERFACES
@@ -39,12 +40,13 @@ export interface Cart {
 }
 
 // SERVICE
-
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = environment.apiUrl;
+  private primaryUrl = environment.apiUrl;
+  private fallbackUrl = environment.fallbackApiUrl;
+  private currentApiUrl = this.primaryUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -57,102 +59,132 @@ export class ApiService {
 
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
-    //   console.log('Token added to request');
-    } else {
-    //   console.log('No token found');
     }
 
     return headers;
   }
 
-  // AUTH
-  login(email: string, password: string) {
-    return this.http.post<any>(
-      `${this.apiUrl}/auth/login`,
-      { email, password }
+  // HELPER: Try with fallback
+  private makeRequest<T>(
+    requestFn: (url: string) => Observable<T>
+  ): Observable<T> {
+    return requestFn(this.currentApiUrl).pipe(
+      catchError((error) => {
+        // primary fail ho, fallback try 
+        if (this.currentApiUrl === this.primaryUrl) {
+          console.log('Primary API failed, trying fallback...');
+          this.currentApiUrl = this.fallbackUrl;
+          return requestFn(this.fallbackUrl).pipe(
+            catchError((fallbackError) => {
+              console.error('Both APIs failed');
+              // Reset to primary for next request
+              this.currentApiUrl = this.primaryUrl;
+              return throwError(() => fallbackError);
+            })
+          );
+        }
+        // Reset to primary for next request
+        this.currentApiUrl = this.primaryUrl;
+        return throwError(() => error);
+      })
     );
   }
 
-
+  // AUTH
+  login(email: string, password: string) {
+    return this.makeRequest((url) =>
+      this.http.post<any>(`${url}/auth/login`, { email, password })
+    );
+  }
 
   // MENU
   getAllMenuItems(): Observable<{ success: boolean; data: MenuItem[] }> {
-    return this.http.get<{ success: boolean; data: MenuItem[] }>(
-      `${this.apiUrl}/menu`
+    return this.makeRequest((url) =>
+      this.http.get<{ success: boolean; data: MenuItem[] }>(`${url}/menu`)
     );
   }
 
   getMenuItem(id: string): Observable<{ success: boolean; data: MenuItem }> {
-    return this.http.get<{ success: boolean; data: MenuItem }>(
-      `${this.apiUrl}/menu/${id}`
+    return this.makeRequest((url) =>
+      this.http.get<{ success: boolean; data: MenuItem }>(`${url}/menu/${id}`)
     );
   }
 
-  //  CREATE with Token
+  // CREATE with Token
   createMenuItem(item: MenuItem): Observable<{ success: boolean; data: MenuItem }> {
-    return this.http.post<{ success: boolean; data: MenuItem }>(
-      `${this.apiUrl}/menu`,
-      item,
-      { headers: this.getHeaders() }  //  TOKEN ADDED
+    return this.makeRequest((url) =>
+      this.http.post<{ success: boolean; data: MenuItem }>(
+        `${url}/menu`,
+        item,
+        { headers: this.getHeaders() }
+      )
     );
   }
 
-  //  UPDATE with Token
+  // UPDATE with Token
   updateMenuItem(id: string, item: Partial<MenuItem>): Observable<{ success: boolean; data: MenuItem }> {
-    return this.http.put<{ success: boolean; data: MenuItem }>(
-      `${this.apiUrl}/menu/${id}`,
-      item,
-      { headers: this.getHeaders() }  //  TOKEN ADDED
+    return this.makeRequest((url) =>
+      this.http.put<{ success: boolean; data: MenuItem }>(
+        `${url}/menu/${id}`,
+        item,
+        { headers: this.getHeaders() }
+      )
     );
   }
 
-  //  DELETE with Token
+  // DELETE with Token
   deleteMenuItem(id: string): Observable<{ success: boolean }> {
-    return this.http.delete<{ success: boolean }>(
-      `${this.apiUrl}/menu/${id}`,
-      { headers: this.getHeaders() }  //  TOKEN ADDED
+    return this.makeRequest((url) =>
+      this.http.delete<{ success: boolean }>(
+        `${url}/menu/${id}`,
+        { headers: this.getHeaders() }
+      )
     );
   }
 
   // CART
   getCart(): Observable<{ success: boolean; data: Cart }> {
-    return this.http.get<{ success: boolean; data: Cart }>(
-      `${this.apiUrl}/cart`
+    return this.makeRequest((url) =>
+      this.http.get<{ success: boolean; data: Cart }>(`${url}/cart`)
     );
   }
 
   addToCart(menuItemId: string, quantity: number = 1): Observable<{ success: boolean; data: Cart }> {
-    return this.http.post<{ success: boolean; data: Cart }>(
-      `${this.apiUrl}/cart/add`,
-      { menuItemId, quantity }
+    return this.makeRequest((url) =>
+      this.http.post<{ success: boolean; data: Cart }>(
+        `${url}/cart/add`,
+        { menuItemId, quantity }
+      )
     );
   }
 
   removeFromCart(menuItemId: string): Observable<{ success: boolean; data: Cart }> {
-    return this.http.delete<{ success: boolean; data: Cart }>(
-      `${this.apiUrl}/cart/remove/${menuItemId}`
+    return this.makeRequest((url) =>
+      this.http.delete<{ success: boolean; data: Cart }>(
+        `${url}/cart/remove/${menuItemId}`
+      )
     );
   }
 
   clearCart(): Observable<{ success: boolean }> {
-    return this.http.delete<{ success: boolean }>(
-      `${this.apiUrl}/cart/clear`
+    return this.makeRequest((url) =>
+      this.http.delete<{ success: boolean }>(`${url}/cart/clear`)
     );
   }
 
-// AI
-extractMenuDetails(userInput: string): Observable<AIResponse> {
-  return this.http.post<AIResponse>(
-    `${this.apiUrl}/ai/extract`,
-    { userInput }
-  );
-}
+  // AI
+  extractMenuDetails(userInput: string): Observable<AIResponse> {
+    return this.makeRequest((url) =>
+      this.http.post<AIResponse>(`${url}/ai/extract`, { userInput })
+    );
+  }
 
-//  ADD THIS
-generateAIImage(dishName: string): Observable<{ success: boolean; imageUrl: string }> {
-  return this.http.post<{ success: boolean; imageUrl: string }>(
-    `${this.apiUrl}/ai/generate-image`,
-    { dishName }
-  );
-}
+  generateAIImage(dishName: string): Observable<{ success: boolean; imageUrl: string }> {
+    return this.makeRequest((url) =>
+      this.http.post<{ success: boolean; imageUrl: string }>(
+        `${url}/ai/generate-image`,
+        { dishName }
+      )
+    );
+  }
 }
