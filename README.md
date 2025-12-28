@@ -237,6 +237,7 @@ ionic serve
 // - Default descriptions
 ```
 
+
 ### **Image Generation**
 ```javascript
 // Pollinations.ai
